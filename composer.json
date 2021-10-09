@@ -1,0 +1,30 @@
+{
+    "name": "furious-developer/lara-bit",
+    "description": "Create Laravel views (blade template) using 'php artisan' command",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "views",
+        "blade",
+        "template",
+        "generator",
+        "php",
+        "artisan",
+        "command"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ragib Mrb",
+            "email": "ragib.mrb@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "FuriousDeveloper\\LaraBit\\": "src/"
+        }
+    }
+}
