@@ -36,17 +36,17 @@ LaraBit comes with 2 type of Templates
 
 **commends:**
 
-    php artisan make:view index --type basic
+    php artisan make:view index1 --type basic
 ---- or ----
 
-    php artisan make:view index --type advance
+    php artisan make:view index2 --type advance
 
 **or use shortcut**
 
-    php artisan make:view index -t basic
+    php artisan make:view index3 -t basic
 ---- or ----
 
-    php artisan make:view index -t advance
+    php artisan make:view index4 -t advance
 
 ### Create new Blade Template inside Single/Multiple Folders
 
@@ -86,10 +86,10 @@ Follow the **Modify Template** Steps then inside "\resources\views\vendor\larabi
 
 if we wanted to use example.blade.php then we have to place/create this template inside "\resources\views\vendor\larabit" folder then to generate new blade file using your template use the command mention below.
 
-    php artisan make:view index --type example
+    php artisan make:view index6 --type example
 ---- or ----
 
-    php artisan make:view index -t example
+    php artisan make:view index7 -t example
 
 
 
