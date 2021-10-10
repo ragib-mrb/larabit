@@ -121,6 +121,6 @@ class LaraBit extends Command
             endif;
         endif;
 
-        return $destination . $name . $this->extension;
+        return $destination . $this->DS . $name . $this->extension;
     }
 }
