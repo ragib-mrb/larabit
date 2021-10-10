@@ -1,6 +1,6 @@
 {
     "name": "furious-developer/lara-bit",
-    "description": "Create Laravel views (blade template) using 'php artisan' command",
+    "description": "Create Laravel views (blade template) using 'php artisan' command-line interface",
     "type": "library",
     "keywords": [
         "laravel",

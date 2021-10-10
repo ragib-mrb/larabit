@@ -8,7 +8,7 @@ LaraBit extends the power of Laravel Artisan tool and give you the command line 
 
 ## Installation
 
-install it with [composer](https://getcomposer.org/)
+install it with [composer](https://getcomposer.org/){:target="_blank"}
 
     composer require furious-developer/lara-bit
 
