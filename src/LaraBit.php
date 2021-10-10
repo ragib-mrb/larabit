@@ -109,7 +109,6 @@ class LaraBit extends Command
         $path = explode('.', $this->argument('name'));
         $name = array_pop($path);
         $folders = implode($this->DS, $path);
-
         $destination = resource_path('views' . $this->DS . $folders);
 
         if (!is_dir($destination)) :
@@ -121,6 +120,8 @@ class LaraBit extends Command
             endif;
         endif;
 
-        return $destination . $this->DS . $name . $this->extension;
+        return  empty($folders) ?
+            $destination . $name . $this->extension
+            : $destination . $this->DS . $name . $this->extension;
     }
 }
