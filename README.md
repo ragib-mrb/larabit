@@ -83,6 +83,7 @@ Sometimes we wish to use our own templates instead of using the templates that c
 Follow the **Modify Template** Steps then inside "\resources\views\vendor\larabit" place your blade template that you want to use.
 
 **Example:**
+
 if we wanted to use example.blade.php then we have to place/create this template inside "\resources\views\vendor\larabit" folder then to generate new blade file using your template use the command mention below.
 
     php artisan make:view index --type example
