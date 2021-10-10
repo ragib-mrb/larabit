@@ -26,5 +26,12 @@
         "psr-4": {
             "FuriousDeveloper\\LaraBit\\": "src/"
         }
+    },
+    "extra": {
+        "laravel":{
+            "providers":[
+                "FuriousDeveloper\\LaraBit\\LaraBitServiceProvider"
+            ]
+        }
     }
 }
