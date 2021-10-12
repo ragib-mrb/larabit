@@ -34,7 +34,7 @@ LaraBit comes with 2 type of Templates
 - **basic** (Default Type) : It will generate the template with basic HTML code.
 - **advance** : It will generate the template with HTML code and also include some useful HTML tags as well.
 
-**commends:**
+**commands:**
 
     php artisan make:view index1 --type basic
 ---- or ----
