@@ -2,7 +2,7 @@
 
 ## About LaraBit
 
-Have you ever wonder to create Laravel views (Blade Templates) using the same type of artisan commends that you usually use to create new controllers, models and migrations etc.
+Have you ever wonder to create Laravel views (Blade Templates) using the same type of artisan commands that you usually use to create new controllers, models and migrations etc.
 
 LaraBit extends the power of Laravel Artisan tool and give you the command line interface to create new blade templates really easy.
 
@@ -34,7 +34,7 @@ LaraBit comes with 2 type of Templates
 - **basic** (Default Type) : It will generate the template with basic HTML code.
 - **advance** : It will generate the template with HTML code and also include some useful HTML tags as well.
 
-**commends:**
+**commands:**
 
     php artisan make:view index1 --type basic
 ---- or ----
