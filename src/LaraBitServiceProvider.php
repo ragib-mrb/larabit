@@ -33,7 +33,7 @@ class LaraBitServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
 
-            $this->commands([LaraBit::class]);
+            $this->commands([LaraBit::class, ListTypes::class]);
         }
     }
 }
