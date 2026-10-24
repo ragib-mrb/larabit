@@ -1,43 +1,39 @@
 <?php
 
-namespace FuriousDeveloper\LaraBit;
+namespace RagibMrb\LaraBit;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Illuminate\Support\Str;
 
 
-class LaraBit extends Command
+class LaraBit extends Command implements PromptsForMissingInput
 {
     /**
      * The name and signature of the console command.
      *
+     * Laravel 10+ ships its own `make:view`, so LaraBit uses its own namespace.
+     *
      * @var string
      */
-    protected $signature = 'make:view 
-                            {name : The name of the Blade Template. [You can also include the folder name with the file name. For Eg: FolderOne.FolderTwo.FileName]}  
-                            {--t|type= : Define the Type of the Blade Teplate.}';
+    protected $signature = 'larabit:view
+                            {name* : The name(s) of the Blade Template. [You can also include the folder name with the file name. For Eg: FolderOne.FolderTwo.FileName]}
+                            {--t|type= : Define the Type of the Blade Template. [Default: basic, or page when --extends is used]}
+                            {--extends= : The layout the new view extends (used by the page template). [Default: layouts.app]}
+                            {--section=content : The section name used by the page and layout templates.}
+                            {--f|force : Overwrite the file if it already exists.}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new Blade Template in view folder';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+    protected $description = 'Create new Blade Template(s) in view folder';
 
 
     private $extension = '.blade.php';
     private $DS = DIRECTORY_SEPARATOR;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -46,82 +42,109 @@ class LaraBit extends Command
      */
     public function handle()
     {
-        try {
-            $this->createTemplate($this->getFile(), $this->getContent());
-        } catch (Exception $e) {
-            $this->newLine();
-            $this->error("Error! {$e->getMessage()}");
-            $this->newLine();
-            exit;
-        }
+        $type = $this->option('type') ?: ($this->option('extends') ? 'page' : 'basic');
+        $types = Templates::available();
 
-        return 0;
+        if (!array_key_exists($type, $types)) :
+            $this->components->error("Template type [{$type}] does not exist. Available types: " . implode(', ', array_keys($types)) . '.');
+
+            return self::FAILURE;
+        endif;
+
+        $failed = false;
+
+        foreach ($this->argument('name') as $name) :
+            if (!$this->createView($name, $type)) :
+                $failed = true;
+            endif;
+        endforeach;
+
+        return $failed ? self::FAILURE : self::SUCCESS;
     }
 
     /**
-     * Create new blade template
+     * Create a single view, reporting the result on the console
+     */
+    private function createView($name, $type)
+    {
+        try {
+            $file = $this->getFile($name);
+
+            if (file_exists($file) && !$this->option('force')) :
+                $this->components->error("View [{$file}] already exists. Use --force to overwrite it.");
+
+                return false;
+            endif;
+
+            $this->createTemplate($file, $this->getContent($name, $type));
+        } catch (Exception $e) {
+            $this->components->error($e->getMessage());
+
+            return false;
+        }
+
+        $this->components->info("View [{$file}] created successfully.");
+
+        return true;
+    }
+
+    /**
+     * Create new blade template (and its folders, if required)
      */
     private function createTemplate($file, $content)
     {
-        if (!file_exists($file)) :
-            if (file_put_contents($file, $content)) :
-                $this->newLine();
-                $this->info('Hooray!!! New Blade Template Created Successfully. Happy Coding...');
-                $this->newLine();
-                $this->comment("Template Location: {$file}");
-                $this->newLine();
-            else :
-                $this->newLine();
-                $this->error('Error! Please check the views folder Permissions');
-                $this->newLine();
-            endif;
-        else :
-            $this->newLine();
-            $this->error('Opss!!! File already exists, Please use different name or rename existing file');
-            $this->newLine();
+        $directory = dirname($file);
+
+        if (!is_dir($directory) && !mkdir($directory, 0777, true)) :
+            throw new Exception('Please check the views folder Permissions');
+        endif;
+
+        if (file_put_contents($file, $content) === false) :
+            throw new Exception('Please check the views folder Permissions');
         endif;
     }
 
     /**
-     * Read the content from the Blade Template
+     * Render the Blade Template with the variables every template can use
      */
-    private function getContent()
+    private function getContent($name, $type)
     {
+        $segments = explode('.', $name);
 
-        $type = !empty($this->option('type')) ? $this->option('type') : 'basic';
-
-        try {
-            return view("larabit::{$type}")->render();
-        } catch (Exception $e) {
-            $this->newLine();
-            $this->error("Error! {$e->getMessage()}");
-            $this->newLine();
-            exit();
-        }
+        return view("larabit::{$type}", [
+            'view' => $name,
+            'name' => end($segments),
+            'title' => Str::headline(end($segments)),
+            'extends' => $this->option('extends') ?: 'layouts.app',
+            'section' => $this->option('section') ?: 'content',
+        ])->render();
     }
 
     /**
-     * Create the directories (if require)
+     * Resolve the absolute path of the new template
      */
-    private function getFile()
+    private function getFile($name)
     {
+        $path = explode('.', $name);
 
-        $path = explode('.', $this->argument('name'));
-        $name = array_pop($path);
-        $folders = implode($this->DS, $path);
-        $destination = resource_path('views' . $this->DS . $folders);
-
-        if (!is_dir($destination)) :
-            if (!mkdir($destination, 0777, true)) :
-                $this->newLine();
-                $this->error('Error! Please check the views folder Permissions');
-                $this->newLine();
-                exit;
-            endif;
+        if (in_array('', $path, true)) :
+            throw new Exception("Invalid template name [{$name}]. Use dots only to separate folders, e.g. FolderOne.FileName");
         endif;
 
-        return  empty($folders) ?
-            $destination . $name . $this->extension
-            : $destination . $this->DS . $name . $this->extension;
+        $file = array_pop($path);
+
+        return resource_path(implode($this->DS, array_merge(['views'], $path, [$file . $this->extension])));
+    }
+
+    /**
+     * Prompt for missing input arguments using the returned questions.
+     *
+     * @return array
+     */
+    protected function promptForMissingArgumentsUsing()
+    {
+        return [
+            'name' => ['What should the view be named?', 'E.g. pages.about'],
+        ];
     }
 }

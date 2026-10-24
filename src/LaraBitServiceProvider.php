@@ -1,6 +1,6 @@
 <?php
 
-namespace FuriousDeveloper\LaraBit;
+namespace RagibMrb\LaraBit;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -29,11 +29,11 @@ class LaraBitServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . DIRECTORY_SEPARATOR . 'views' => resource_path('views/vendor/larabit')
-        ]);
+        ], 'larabit-views');
 
         if ($this->app->runningInConsole()) {
 
-            $this->commands([LaraBit::class]);
+            $this->commands([LaraBit::class, ListTypes::class]);
         }
     }
 }
