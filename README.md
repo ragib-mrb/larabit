@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="https://github.com/ragib-mrb/larabit/actions/workflows/tests.yml"><img src="https://github.com/ragib-mrb/larabit/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
-<a href="https://packagist.org/packages/ragib-mrb/larabit"><img src="https://img.shields.io/packagist/v/ragib-mrb/larabit" alt="Packagist"></a>
+<a href="https://packagist.org/packages/furious-developer/lara-bit"><img src="https://img.shields.io/packagist/v/furious-developer/lara-bit" alt="Packagist"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
 </p>
 
@@ -40,7 +40,7 @@ php artisan larabit:view components.alert --type component
 ## Installation
 
 ```bash
-composer require ragib-mrb/larabit --dev
+composer require furious-developer/lara-bit --dev
 ```
 
 The service provider is registered automatically.
@@ -163,11 +163,9 @@ php artisan larabit:types    List available template types
 - It exits with a failure code when a view exists, the template type is unknown, or a name is invalid.
 - The bundled templates now use the generated `$title` instead of "Your Title".
 - Templates you published with 1.x keep working unchanged.
-- The package moved from `furious-developer/lara-bit` to `ragib-mrb/larabit`, and the namespace from `FuriousDeveloper\LaraBit` to `RagibMrb\LaraBit`:
 
 ```bash
-composer remove furious-developer/lara-bit
-composer require ragib-mrb/larabit --dev
+composer require furious-developer/lara-bit:^2.0 --dev
 ```
 
 See [CHANGELOG.md](CHANGELOG.md) for details.
