@@ -1,6 +1,6 @@
 <?php
 
-namespace RagibMrb\LaraBit;
+namespace FuriousDeveloper\LaraBit;
 
 use Exception;
 use Illuminate\Console\Command;
