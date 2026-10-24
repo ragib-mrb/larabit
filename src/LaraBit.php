@@ -11,11 +11,13 @@ class LaraBit extends Command
     /**
      * The name and signature of the console command.
      *
+     * Laravel 10+ ships its own `make:view`, so LaraBit uses its own namespace.
+     *
      * @var string
      */
-    protected $signature = 'make:view 
-                            {name : The name of the Blade Template. [You can also include the folder name with the file name. For Eg: FolderOne.FolderTwo.FileName]}  
-                            {--t|type= : Define the Type of the Blade Teplate.}';
+    protected $signature = 'larabit:view
+                            {name : The name of the Blade Template. [You can also include the folder name with the file name. For Eg: FolderOne.FolderTwo.FileName]}
+                            {--t|type=basic : Define the Type of the Blade Template.}';
 
     /**
      * The console command description.
@@ -24,20 +26,9 @@ class LaraBit extends Command
      */
     protected $description = 'Create a new Blade Template in view folder';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-
 
     private $extension = '.blade.php';
     private $DS = DIRECTORY_SEPARATOR;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -47,38 +38,47 @@ class LaraBit extends Command
     public function handle()
     {
         try {
-            $this->createTemplate($this->getFile(), $this->getContent());
+            $file = $this->getFile();
+
+            if (file_exists($file)) :
+                $this->newLine();
+                $this->error('Oops!!! File already exists, Please use different name or rename existing file');
+                $this->newLine();
+
+                return self::FAILURE;
+            endif;
+
+            $this->createTemplate($file, $this->getContent());
         } catch (Exception $e) {
             $this->newLine();
             $this->error("Error! {$e->getMessage()}");
             $this->newLine();
-            exit;
+
+            return self::FAILURE;
         }
 
-        return 0;
+        $this->newLine();
+        $this->info('Hooray!!! New Blade Template Created Successfully. Happy Coding...');
+        $this->newLine();
+        $this->comment("Template Location: {$file}");
+        $this->newLine();
+
+        return self::SUCCESS;
     }
 
     /**
-     * Create new blade template
+     * Create new blade template (and its folders, if required)
      */
     private function createTemplate($file, $content)
     {
-        if (!file_exists($file)) :
-            if (file_put_contents($file, $content)) :
-                $this->newLine();
-                $this->info('Hooray!!! New Blade Template Created Successfully. Happy Coding...');
-                $this->newLine();
-                $this->comment("Template Location: {$file}");
-                $this->newLine();
-            else :
-                $this->newLine();
-                $this->error('Error! Please check the views folder Permissions');
-                $this->newLine();
-            endif;
-        else :
-            $this->newLine();
-            $this->error('Opss!!! File already exists, Please use different name or rename existing file');
-            $this->newLine();
+        $directory = dirname($file);
+
+        if (!is_dir($directory) && !mkdir($directory, 0777, true)) :
+            throw new Exception('Please check the views folder Permissions');
+        endif;
+
+        if (file_put_contents($file, $content) === false) :
+            throw new Exception('Please check the views folder Permissions');
         endif;
     }
 
@@ -87,41 +87,24 @@ class LaraBit extends Command
      */
     private function getContent()
     {
+        $type = $this->option('type') ?: 'basic';
 
-        $type = !empty($this->option('type')) ? $this->option('type') : 'basic';
-
-        try {
-            return view("larabit::{$type}")->render();
-        } catch (Exception $e) {
-            $this->newLine();
-            $this->error("Error! {$e->getMessage()}");
-            $this->newLine();
-            exit();
-        }
+        return view("larabit::{$type}")->render();
     }
 
     /**
-     * Create the directories (if require)
+     * Resolve the absolute path of the new template
      */
     private function getFile()
     {
-
         $path = explode('.', $this->argument('name'));
-        $name = array_pop($path);
-        $folders = implode($this->DS, $path);
-        $destination = resource_path('views' . $this->DS . $folders);
 
-        if (!is_dir($destination)) :
-            if (!mkdir($destination, 0777, true)) :
-                $this->newLine();
-                $this->error('Error! Please check the views folder Permissions');
-                $this->newLine();
-                exit;
-            endif;
+        if (in_array('', $path, true)) :
+            throw new Exception('Invalid template name. Use dots only to separate folders, e.g. FolderOne.FileName');
         endif;
 
-        return  empty($folders) ?
-            $destination . $name . $this->extension
-            : $destination . $this->DS . $name . $this->extension;
+        $name = array_pop($path);
+
+        return resource_path(implode($this->DS, array_merge(['views'], $path, [$name . $this->extension])));
     }
 }

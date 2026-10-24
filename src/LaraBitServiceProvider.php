@@ -29,7 +29,7 @@ class LaraBitServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . DIRECTORY_SEPARATOR . 'views' => resource_path('views/vendor/larabit')
-        ]);
+        ], 'larabit-views');
 
         if ($this->app->runningInConsole()) {
 
