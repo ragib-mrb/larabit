@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest a new template type, option or improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the workflow or boilerplate you want LaraBit to handle.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: For example, a command or option and the file it should generate.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Workarounds you use today
+      description: For example, a custom template in resources/views/vendor/larabit.

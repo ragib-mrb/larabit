@@ -2,6 +2,8 @@
 
 Bug reports and pull requests are welcome. For larger changes, please open an issue first so we can agree on the approach.
 
+Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md). Report security issues privately as described in [SECURITY.md](SECURITY.md).
+
 ## Running the tests
 
     composer install
