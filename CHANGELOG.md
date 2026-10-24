@@ -7,8 +7,18 @@
 - **Breaking:** requires PHP 8.2+ and Laravel 12 or 13.
 - The command now returns a failure exit code when the file already exists, the template type is unknown, or the name is invalid. It no longer calls `exit`.
 - Folders are only created after the template has rendered successfully.
+- The bundled `basic` and `advance` templates use a title generated from the view name instead of "Your Title".
+- Console output uses Laravel's standard component style.
 
 ### Added
+- New template types: `layout`, `page` and `component`.
+- Create several views in one run: `larabit:view home about contact`.
+- `--extends` and `--section` options for pages that extend a layout.
+- `--force` (`-f`) to overwrite existing views.
+- Template variables: `$view`, `$name`, `$title`, `$extends`, `$section`.
+- Prompts for the view name when it is missing.
+- `larabit:types` command listing bundled and published template types.
+- Unknown types report the available types.
 - `MIT` LICENSE file (the package was already declared MIT in `composer.json`).
 - `larabit-views` publish tag: `php artisan vendor:publish --tag=larabit-views`.
 - Validation for names with empty segments (e.g. `folder..index`).
