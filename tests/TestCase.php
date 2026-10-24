@@ -1,8 +1,8 @@
 <?php
 
-namespace FuriousDeveloper\LaraBit\Tests;
+namespace RagibMrb\LaraBit\Tests;
 
-use FuriousDeveloper\LaraBit\LaraBitServiceProvider;
+use RagibMrb\LaraBit\LaraBitServiceProvider;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace FuriousDeveloper\LaraBit;
+namespace RagibMrb\LaraBit;
 
 use Illuminate\Support\ServiceProvider;
 
