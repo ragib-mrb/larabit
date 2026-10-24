@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.2] - 2026-10-24
+
+### Changed
+- The `basic` and `advance` templates set `<html lang>` from the app locale instead of a hard-coded `en` (idea from [#2](https://github.com/ragib-mrb/larabit/pull/2) by @kambizzandi).
+
 ## [2.0.1] - 2026-10-24
 
 ### Fixed
@@ -34,6 +39,7 @@
 
 See the [tags on GitHub](https://github.com/ragib-mrb/larabit/tags).
 
+[2.0.2]: https://github.com/ragib-mrb/larabit/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/ragib-mrb/larabit/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/ragib-mrb/larabit/compare/v1.0.5...v2.0.0
 [1.0.5]: https://github.com/ragib-mrb/larabit/releases/tag/v1.0.5
