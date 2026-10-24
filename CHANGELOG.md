@@ -4,6 +4,7 @@
 
 ### Fixed
 - Restored the `FuriousDeveloper\LaraBit` namespace and the `furious-developer/lara-bit` package name in `composer.json`. 2.0.0 shipped with a `RagibMrb\LaraBit` namespace by mistake. The package itself was always published as `furious-developer/lara-bit`.
+- Updated the Packagist description and keywords, and added homepage and support links.
 
 ## [2.0.0] - 2026-10-24
 
