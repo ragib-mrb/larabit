@@ -20,12 +20,27 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0"
+        "php": "^8.2",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/view": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0|^11.0",
+        "phpunit/phpunit": "^11.5|^12.0"
     },
     "autoload": {
         "psr-4": {
             "FuriousDeveloper\\LaraBit\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FuriousDeveloper\\LaraBit\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
     },
     "extra": {
         "laravel":{
@@ -33,5 +48,8 @@
                 "FuriousDeveloper\\LaraBit\\LaraBitServiceProvider"
             ]
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
