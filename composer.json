@@ -1,5 +1,5 @@
 {
-    "name": "furious-developer/lara-bit",
+    "name": "ragib-mrb/larabit",
     "description": "Create Laravel views (blade template) using 'php artisan' command-line interface",
     "type": "library",
     "keywords": [
@@ -31,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "FuriousDeveloper\\LaraBit\\": "src/"
+            "RagibMrb\\LaraBit\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "FuriousDeveloper\\LaraBit\\Tests\\": "tests/"
+            "RagibMrb\\LaraBit\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -45,7 +45,7 @@
     "extra": {
         "laravel":{
             "providers":[
-                "FuriousDeveloper\\LaraBit\\LaraBitServiceProvider"
+                "RagibMrb\\LaraBit\\LaraBitServiceProvider"
             ]
         }
     },

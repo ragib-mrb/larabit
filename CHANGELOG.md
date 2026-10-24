@@ -1,8 +1,9 @@
 # Changelog
 
-## [2.0.0] - Unreleased
+## [2.0.0] - 2026-10-24
 
 ### Changed
+- **Breaking:** the package is renamed from `furious-developer/lara-bit` to `ragib-mrb/larabit`, and the namespace from `FuriousDeveloper\LaraBit` to `RagibMrb\LaraBit`.
 - **Breaking:** the command is renamed from `make:view` to `larabit:view`, so it no longer overrides Laravel's built-in `make:view` (Laravel 10+).
 - **Breaking:** requires PHP 8.2+ and Laravel 12 or 13.
 - The command now returns a failure exit code when the file already exists, the template type is unknown, or the name is invalid. It no longer calls `exit`.
@@ -28,5 +29,5 @@
 
 See the [tags on GitHub](https://github.com/ragib-mrb/larabit/tags).
 
-[2.0.0]: https://github.com/ragib-mrb/larabit/compare/v1.0.5...HEAD
+[2.0.0]: https://github.com/ragib-mrb/larabit/compare/v1.0.5...v2.0.0
 [1.0.5]: https://github.com/ragib-mrb/larabit/releases/tag/v1.0.5

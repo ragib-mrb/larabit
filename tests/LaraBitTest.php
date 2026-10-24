@@ -1,8 +1,8 @@
 <?php
 
-namespace FuriousDeveloper\LaraBit\Tests;
+namespace RagibMrb\LaraBit\Tests;
 
-use FuriousDeveloper\LaraBit\LaraBit;
+use RagibMrb\LaraBit\LaraBit;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
