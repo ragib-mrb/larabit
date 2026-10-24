@@ -6,13 +6,27 @@
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
 </p>
 
-## About LaraBit
+# LaraBit
 
-LaraBit is an Artisan command that creates Blade templates from **starter templates** that you can publish, edit, and extend with your own, so every new view starts with the boilerplate your project needs.
+LaraBit scaffolds Blade views from **starter templates** (pages, layouts, components, full HTML documents) that you can publish, edit, and extend with your own. Every new view starts with the boilerplate your project actually uses.
 
-    php artisan larabit:view admin.users.index --type advance
+```bash
+php artisan larabit:view layouts.app --type layout
+php artisan larabit:view pages.home pages.about pages.contact --extends layouts.app
+php artisan larabit:view components.alert --type component
+```
 
-> Laravel 10+ also ships a plain `php artisan make:view`. LaraBit uses its own `larabit:view` command so it never replaces the built-in one.
+> Laravel 10+ also ships a plain `php artisan make:view` that creates an empty file. LaraBit uses its own `larabit:view` command, so it never replaces the built-in one.
+
+## Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Template types](#template-types)
+- [Custom templates](#custom-templates)
+- [Command reference](#command-reference)
+- [Upgrading from 1.x](#upgrading-from-1x)
 
 ## Requirements
 
@@ -25,53 +39,130 @@ LaraBit is an Artisan command that creates Blade templates from **starter templa
 
 ## Installation
 
-    composer require furious-developer/lara-bit --dev
+```bash
+composer require furious-developer/lara-bit --dev
+```
 
 The service provider is registered automatically.
 
 ## Usage
 
-### Create a template
+### Create a view
 
-    php artisan larabit:view index
+```bash
+php artisan larabit:view index
+```
 
-This creates `resources/views/index.blade.php` and prints its absolute path. LaraBit never overwrites an existing file.
+This creates `resources/views/index.blade.php` and prints its path. Run the command without a name and LaraBit asks for one.
 
-### Create a template inside folders
+### Create views inside folders
 
 Use the same dot notation as `view()`. Missing folders are created.
 
-    php artisan larabit:view layout.index
-    php artisan larabit:view folder1.folder2.index
+```bash
+php artisan larabit:view admin.users.index
+# resources/views/admin/users/index.blade.php
+```
 
-### Choose a template type
+### Create several views at once
 
-| Type | Contents |
+```bash
+php artisan larabit:view pages.home pages.about pages.contact
+```
+
+Each view is created independently. If one already exists, the others are still created and the command exits with a failure code.
+
+### Create a page that extends a layout
+
+```bash
+php artisan larabit:view pages.user-profile --extends layouts.admin --section main
+```
+
+```blade
+@extends('layouts.admin')
+
+@section('title', 'User Profile')
+
+@section('main')
+    <!-- Page Blade Template Created Using: LaraBit -->
+@endsection
+```
+
+`--extends` switches the default type to `page`. `--section` defaults to `content`.
+
+### Overwrite an existing view
+
+LaraBit never overwrites a file unless you pass `--force` (or `-f`).
+
+## Template types
+
+| Type | Creates |
 |---|---|
-| `basic` (default) | Minimal HTML5 page |
-| `advance` | HTML5 page with SEO, Open Graph, favicon, stylesheet and script placeholders |
+| `basic` (default) | A minimal HTML5 document |
+| `advance` | An HTML5 document with SEO, Open Graph, favicon, stylesheet and script placeholders |
+| `layout` | A layout with `@yield` for the title and main section, `@stack('styles')` / `@stack('scripts')`, a CSRF meta tag and the app locale |
+| `page` | A child view with `@extends`, a title section and a content section |
+| `component` | An anonymous component with `@props` and `{{ $slot }}`. Create it under `components.` to use it as `<x-...>` |
 
-    php artisan larabit:view index --type advance
-    php artisan larabit:view index -t advance
+Pick one with `--type` (or `-t`). List every available type, including your own, with:
 
-## Customize templates
+```bash
+php artisan larabit:types
+```
+
+## Custom templates
 
 Publish the bundled templates to `resources/views/vendor/larabit` and edit them:
 
-    php artisan vendor:publish --tag=larabit-views
+```bash
+php artisan vendor:publish --tag=larabit-views
+```
 
-To add your own type, place any Blade file in that folder and pass its name as the type:
+A published file with the same name as a bundled type replaces it. Any other Blade file in that folder becomes a new type:
 
-    # resources/views/vendor/larabit/example.blade.php
-    php artisan larabit:view index --type example
+```bash
+# resources/views/vendor/larabit/livewire-page.blade.php
+php artisan larabit:view pages.dashboard --type livewire-page
+```
 
-Templates are rendered through Blade when the new file is created, so Blade directives inside a template run at that moment. Write `@@` or `@{{ }}` for output you want to keep in the generated file.
+### Template variables
+
+Templates are rendered through Blade when the view is created, with these variables:
+
+| Variable | Example (`admin.user-profile`) |
+|---|---|
+| `$view` | `admin.user-profile` |
+| `$name` | `user-profile` |
+| `$title` | `User Profile` |
+| `$extends` | `--extends` value, default `layouts.app` |
+| `$section` | `--section` value, default `content` |
+
+Because the template itself is rendered, write `@@` before a directive and `@{{ }}` for echoes that should stay in the generated view:
+
+```blade
+@@extends('{{ $extends }}')
+<h1>@{{ $user->name }}</h1>
+```
+
+## Command reference
+
+```text
+php artisan larabit:view <name>... [options]
+
+  -t, --type=TYPE        Template type (default: basic, or page with --extends)
+      --extends=LAYOUT   Layout the page extends (default: layouts.app)
+      --section=NAME     Section used by the page and layout templates (default: content)
+  -f, --force            Overwrite existing views
+
+php artisan larabit:types    List available template types
+```
 
 ## Upgrading from 1.x
 
 - The command is now `larabit:view` (previously `make:view`).
-- It exits with a non-zero code when the file exists or the template type is unknown.
-- Published templates in `resources/views/vendor/larabit` keep working unchanged.
+- It exits with a failure code when a view exists, the template type is unknown, or a name is invalid.
+- The bundled templates now use the generated `$title` instead of "Your Title".
+- Templates you published with 1.x keep working unchanged.
 
 See [CHANGELOG.md](CHANGELOG.md) for details.
 
