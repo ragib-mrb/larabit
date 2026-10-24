@@ -1,6 +1,6 @@
 {
-    "name": "ragib-mrb/larabit",
-    "description": "Create Laravel views (blade template) using 'php artisan' command-line interface",
+    "name": "furious-developer/lara-bit",
+    "description": "Artisan command to scaffold Blade views (pages, layouts, components) from customizable starter templates",
     "type": "library",
     "keywords": [
         "laravel",
@@ -8,17 +8,26 @@
         "blade",
         "template",
         "generator",
+        "scaffold",
+        "layout",
+        "component",
         "php",
         "artisan",
         "command"
     ],
+    "homepage": "https://github.com/ragib-mrb/larabit",
     "license": "MIT",
     "authors": [
         {
             "name": "Ragib Mrb",
-            "email": "ragib.mrb@gmail.com"
+            "email": "ragib.mrb@gmail.com",
+            "homepage": "https://github.com/ragib-mrb"
         }
     ],
+    "support": {
+        "issues": "https://github.com/ragib-mrb/larabit/issues",
+        "source": "https://github.com/ragib-mrb/larabit"
+    },
     "require": {
         "php": "^8.2",
         "illuminate/console": "^12.0|^13.0",
@@ -31,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RagibMrb\\LaraBit\\": "src/"
+            "FuriousDeveloper\\LaraBit\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RagibMrb\\LaraBit\\Tests\\": "tests/"
+            "FuriousDeveloper\\LaraBit\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -45,7 +54,7 @@
     "extra": {
         "laravel":{
             "providers":[
-                "RagibMrb\\LaraBit\\LaraBitServiceProvider"
+                "FuriousDeveloper\\LaraBit\\LaraBitServiceProvider"
             ]
         }
     },
