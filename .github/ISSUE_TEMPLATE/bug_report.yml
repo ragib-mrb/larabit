@@ -1,0 +1,33 @@
+name: Bug report
+description: Something in LaraBit doesn't work as documented
+labels: [bug]
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: LaraBit, Laravel and PHP versions
+      placeholder: LaraBit 2.0.2, Laravel 13.38, PHP 8.4
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command
+      description: The exact command you ran
+      placeholder: php artisan larabit:view pages.home --extends layouts.app
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+      description: Include the console output or the generated file if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: template
+    attributes:
+      label: Custom template (if any)
+      description: If you used a published or custom template, paste it here.
+      render: blade
