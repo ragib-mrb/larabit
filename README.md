@@ -1,95 +1,84 @@
 <p  align="center"><img  src="https://user-images.githubusercontent.com/36569722/136689176-8f0d31aa-f543-461c-a545-5c425231bb4e.png"  width="400"></p>
 
+<p align="center">
+<a href="https://github.com/ragib-mrb/larabit/actions/workflows/tests.yml"><img src="https://github.com/ragib-mrb/larabit/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
+<a href="https://packagist.org/packages/furious-developer/lara-bit"><img src="https://img.shields.io/packagist/v/furious-developer/lara-bit" alt="Packagist"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
+</p>
+
 ## About LaraBit
 
-Have you ever wonder to create Laravel views (Blade Templates) using the same type of artisan commands that you usually use to create new controllers, models and migrations etc.
+LaraBit is an Artisan command that creates Blade templates from **starter templates** that you can publish, edit, and extend with your own, so every new view starts with the boilerplate your project needs.
 
-LaraBit extends the power of Laravel Artisan tool and give you the command line interface to create new blade templates really easy.
+    php artisan larabit:view admin.users.index --type advance
+
+> Laravel 10+ also ships a plain `php artisan make:view`. LaraBit uses its own `larabit:view` command so it never replaces the built-in one.
+
+## Requirements
+
+| LaraBit | Laravel | PHP |
+|---|---|---|
+| 2.x | 12, 13 | 8.2+ (Laravel 13 needs 8.3+) |
+| 1.x | 8, 9 | 7.3+ |
+
+1.x registers `make:view`, which overrides Laravel's own `make:view` on Laravel 10 and later. Upgrade to 2.x on current Laravel.
 
 ## Installation
 
-install it with [composer](https://getcomposer.org/)
+    composer require furious-developer/lara-bit --dev
 
-    composer require furious-developer/lara-bit
+The service provider is registered automatically.
 
-## Getting Started
+## Usage
 
-### Create new blade template:
+### Create a template
 
-To create new blade template at the root of the view folder use the command mention below.
+    php artisan larabit:view index
 
-    php artisan make:view <NameOfTheTemplate>
+This creates `resources/views/index.blade.php` and prints its absolute path. LaraBit never overwrites an existing file.
 
-**Example:**
+### Create a template inside folders
 
-if we want to create the "index.blade.php" inside the view folder then use this command and just specify the file name without any file extension.
+Use the same dot notation as `view()`. Missing folders are created.
 
-    php artisan make:view index
+    php artisan larabit:view layout.index
+    php artisan larabit:view folder1.folder2.index
 
-This command will create the index.blade.php file inside view folder and LaraBit will also output the Absolute Path of the file on the console.
+### Choose a template type
 
-### Define template type option:
+| Type | Contents |
+|---|---|
+| `basic` (default) | Minimal HTML5 page |
+| `advance` | HTML5 page with SEO, Open Graph, favicon, stylesheet and script placeholders |
 
-LaraBit comes with 2 type of Templates
-- **basic** (Default Type) : It will generate the template with basic HTML code.
-- **advance** : It will generate the template with HTML code and also include some useful HTML tags as well.
+    php artisan larabit:view index --type advance
+    php artisan larabit:view index -t advance
 
-**commands:**
+## Customize templates
 
-    php artisan make:view index1 --type basic
----- or ----
+Publish the bundled templates to `resources/views/vendor/larabit` and edit them:
 
-    php artisan make:view index2 --type advance
+    php artisan vendor:publish --tag=larabit-views
 
-**or use shortcut**
+To add your own type, place any Blade file in that folder and pass its name as the type:
 
-    php artisan make:view index3 -t basic
----- or ----
+    # resources/views/vendor/larabit/example.blade.php
+    php artisan larabit:view index --type example
 
-    php artisan make:view index4 -t advance
+Templates are rendered through Blade when the new file is created, so Blade directives inside a template run at that moment. Write `@@` or `@{{ }}` for output you want to keep in the generated file.
 
-### Create new Blade Template inside Single/Multiple Folders
+## Upgrading from 1.x
 
-In order to create new blade template inside folder prefix the filename with the folder name and dot (.)
+- The command is now `larabit:view` (previously `make:view`).
+- It exits with a non-zero code when the file exists or the template type is unknown.
+- Published templates in `resources/views/vendor/larabit` keep working unchanged.
 
-LaraBit use the same syntax that **view()** function use to call a view.
-  
-    php artisan make:view layout.index
+See [CHANGELOG.md](CHANGELOG.md) for details.
 
--- define more folder lavel in same way
+## Contributing
 
-    php artisan make:view folder1.folder2.index
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-If the Folder doesn't exists then It will create the new Folder(s). If you receive any error after running the above command then change the file permission of the views folder or Manually create the require folders and then run the command again.
+## License
 
-## Modify Templates
-
-Sometimes we wish to Modify the templates that comes with the LaraBit. we can easily do that by follow the bellow steps.
-
-**run this command**
-
-    php artisan vendor:publish
-
-**Then find the line mention below on the console and press the number that is written in-front of it**
-
-    Provider: FuriousDeveloper\LaraBit\LaraBitServiceProvider
-
-It will generate the basic.blade.php and advance.blade.php inside the "\resources\views\vendor\larabit" folder. Modify the template as per your requirements.
-
-## Add & Use Custom Templates
-
-Sometimes we wish to use our own templates instead of using the templates that comes with LaraBit.
-
-Follow the **Modify Template** Steps then inside "\resources\views\vendor\larabit" place your blade template that you want to use.
-
-**Example:**
-
-if we wanted to use example.blade.php then we have to place/create this template inside "\resources\views\vendor\larabit" folder then to generate new blade file using your template use the command mention below.
-
-    php artisan make:view index6 --type example
----- or ----
-
-    php artisan make:view index7 -t example
-
-
-
+LaraBit is open-source software licensed under the [MIT license](LICENSE).
