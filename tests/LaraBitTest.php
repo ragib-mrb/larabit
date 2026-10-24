@@ -27,6 +27,19 @@ class LaraBitTest extends TestCase
         );
     }
 
+    public function test_html_templates_use_the_app_locale_for_the_lang_attribute()
+    {
+        $this->artisan('larabit:view', ['name' => ['larabit-test.basic']])->assertSuccessful();
+        $this->artisan('larabit:view', ['name' => ['larabit-test.advance'], '--type' => 'advance'])->assertSuccessful();
+
+        foreach (['basic', 'advance'] as $view) :
+            $this->assertStringContainsString(
+                '<html lang="{{ str_replace(\'_\', \'-\', app()->getLocale()) }}">',
+                file_get_contents(resource_path("views/larabit-test/{$view}.blade.php"))
+            );
+        endforeach;
+    }
+
     public function test_it_creates_nested_folders_from_dot_notation()
     {
         $this->artisan('larabit:view', ['name' => ['larabit-test.one.two.index']])->assertSuccessful();
